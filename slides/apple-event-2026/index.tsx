@@ -1,4 +1,4 @@
-import type { DesignSystem, Page, SlideMeta } from '@open-slide/core';
+import { useIsActivePage, type DesignSystem, type Page, type SlideMeta, type SlideTransition } from '@open-slide/core';
 
 import duoCamera from './assets/duo-camera.jpg';
 import duoColors from './assets/duo-colors.jpg';
@@ -47,8 +47,149 @@ const base = {
   letterSpacing: '-0.025em',
 };
 
+const EASE_OUT = 'cubic-bezier(0.16, 1, 0.3, 1)';
+const EASE_IN = 'cubic-bezier(0.4, 0, 1, 1)';
+
+export const transition: SlideTransition = {
+  duration: 260,
+  exit: {
+    duration: 160,
+    easing: EASE_IN,
+    keyframes: [
+      { opacity: 1, transform: 'translateY(0) scale(1)' },
+      { opacity: 0, transform: 'translateY(-5px) scale(1.005)' },
+    ],
+  },
+  enter: {
+    duration: 260,
+    delay: 80,
+    easing: EASE_OUT,
+    keyframes: [
+      { opacity: 0, transform: 'translateY(10px) scale(0.99)', filter: 'blur(3px)' },
+      { opacity: 1, transform: 'translateY(0) scale(1)', filter: 'blur(0)' },
+    ],
+  },
+};
+
+const heroTransition: SlideTransition = {
+  duration: 300,
+  exit: {
+    duration: 170,
+    easing: EASE_IN,
+    keyframes: [{ opacity: 1 }, { opacity: 0 }],
+  },
+  enter: {
+    duration: 300,
+    delay: 100,
+    easing: EASE_OUT,
+    keyframes: [
+      { opacity: 0, transform: 'scale(0.975)', filter: 'blur(5px)' },
+      { opacity: 1, transform: 'scale(1)', filter: 'blur(0)' },
+    ],
+  },
+};
+
+const photoTransition: SlideTransition = {
+  duration: 280,
+  exit: {
+    duration: 170,
+    easing: EASE_IN,
+    keyframes: [{ opacity: 1 }, { opacity: 0 }],
+  },
+  enter: {
+    duration: 280,
+    delay: 90,
+    easing: EASE_OUT,
+    keyframes: [
+      { opacity: 0, transform: 'scale(1.018)' },
+      { opacity: 1, transform: 'scale(1)' },
+    ],
+  },
+};
+
+const motionCss = `
+  @keyframes apple-fade-up {
+    from { opacity: 0; transform: translateY(30px); filter: blur(5px); }
+    to { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+  @keyframes apple-image-in {
+    from { opacity: 0; transform: scale(1.045) translateY(14px); filter: blur(5px); }
+    to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+  }
+  @keyframes apple-line-in {
+    from { transform: scaleX(0); opacity: 0; }
+    to { transform: scaleX(1); opacity: 1; }
+  }
+  @keyframes apple-soft-glow {
+    0% { opacity: 0; transform: scaleX(0.65); }
+    55% { opacity: 0.8; }
+    100% { opacity: 0.28; transform: scaleX(1); }
+  }
+  .apple-page.is-active .os-eyebrow {
+    opacity: 0;
+    animation: apple-fade-up 700ms ${EASE_OUT} 100ms both;
+  }
+  .apple-page.is-active h1,
+  .apple-page.is-active h2 {
+    opacity: 0;
+    animation: apple-fade-up 900ms ${EASE_OUT} 180ms both;
+  }
+  .apple-page.is-active p {
+    opacity: 0;
+    animation: apple-fade-up 760ms ${EASE_OUT} 390ms both;
+  }
+  .apple-page.is-active img {
+    opacity: 0;
+    animation: apple-image-in 1250ms ${EASE_OUT} 120ms both;
+  }
+  .apple-page.is-active .os-price {
+    opacity: 0;
+    animation: apple-fade-up 720ms ${EASE_OUT} 600ms both;
+  }
+  .apple-page.is-active .os-line {
+    transform-origin: left center;
+    animation: apple-line-in 1000ms ${EASE_OUT} 520ms both;
+  }
+  .apple-page.is-active .os-stagger > * {
+    opacity: 0;
+    animation: apple-fade-up 720ms ${EASE_OUT} both;
+  }
+  .apple-page.is-active .os-stagger > *:nth-child(1) { animation-delay: 360ms; }
+  .apple-page.is-active .os-stagger > *:nth-child(2) { animation-delay: 500ms; }
+  .apple-page.is-active .os-stagger > *:nth-child(3) { animation-delay: 640ms; }
+  .apple-page.is-active .os-stagger > *:nth-child(4) { animation-delay: 780ms; }
+  .apple-page.is-active .os-stagger > *:nth-child(5) { animation-delay: 920ms; }
+  .apple-page.is-active .os-glow {
+    transform-origin: center;
+    animation: apple-soft-glow 1400ms ${EASE_OUT} 320ms both;
+  }
+  .apple-page.is-active .os-source {
+    opacity: 0;
+    animation: apple-fade-up 560ms ${EASE_OUT} 980ms both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .apple-page.is-active *,
+    .apple-page.is-active *::before,
+    .apple-page.is-active *::after {
+      animation-duration: 1ms !important;
+      animation-delay: 0ms !important;
+    }
+  }
+`;
+
+const PageFrame = ({ children, style }: { children: React.ReactNode; style: React.CSSProperties }) => {
+  const active = useIsActivePage();
+  return (
+    <div className={`apple-page${active ? ' is-active' : ''}`} style={style}>
+      <style>{motionCss}</style>
+      {children}
+    </div>
+  );
+};
+
 const Eyebrow = ({ children, light = false }: { children: React.ReactNode; light?: boolean }) => (
   <div
+    className="os-eyebrow"
     style={{
       fontSize: 24,
       lineHeight: 1.2,
@@ -64,6 +205,7 @@ const Eyebrow = ({ children, light = false }: { children: React.ReactNode; light
 
 const Source = ({ children, light = false }: { children: React.ReactNode; light?: boolean }) => (
   <div
+    className="os-source"
     style={{
       position: 'absolute',
       left: 120,
@@ -80,6 +222,7 @@ const Source = ({ children, light = false }: { children: React.ReactNode; light?
 
 const Price = ({ children, dark = false }: { children: React.ReactNode; dark?: boolean }) => (
   <div
+    className="os-price"
     style={{
       display: 'inline-flex',
       alignItems: 'baseline',
@@ -96,7 +239,7 @@ const Price = ({ children, dark = false }: { children: React.ReactNode; dark?: b
 );
 
 const Cover: Page = () => (
-  <div style={{ ...base, background: color.white }}>
+  <PageFrame style={{ ...base, background: color.white }}>
     <div style={{ position: 'absolute', inset: 0, padding: '92px 120px' }}>
       <Eyebrow>Apple Event · September 9, 2026</Eyebrow>
       <h1
@@ -147,12 +290,13 @@ const Cover: Page = () => (
         borderRadius: 999,
         background: 'var(--osd-accent)',
       }}
+      className="os-line"
     />
-  </div>
+  </PageFrame>
 );
 
 const Lineup: Page = () => (
-  <div style={{ ...base, background: color.white }}>
+  <PageFrame style={{ ...base, background: color.white }}>
     <div style={{ padding: '92px 120px', width: 940, position: 'relative', zIndex: 3 }}>
       <Eyebrow>The new lineup</Eyebrow>
       <h2
@@ -170,7 +314,7 @@ const Lineup: Page = () => (
         兩種方向。
       </h2>
 
-      <div style={{ width: 780, borderTop: `1px solid ${color.hairline}` }}>
+      <div className="os-stagger" style={{ width: 780, borderTop: `1px solid ${color.hairline}` }}>
         <div style={{ height: 132, display: 'grid', gridTemplateColumns: '1fr 250px', alignItems: 'center', borderBottom: `1px solid ${color.hairline}` }}>
           <div>
             <div style={{ fontSize: 38, fontWeight: 650 }}>iPhone Duo</div>
@@ -202,11 +346,11 @@ const Lineup: Page = () => (
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(0,0,0,0.18), transparent 40%)' }} />
     </div>
     <Source>Apple Newsroom · U.S. starting prices</Source>
-  </div>
+  </PageFrame>
 );
 
 const Duo: Page = () => (
-  <div style={{ ...base, background: color.white }}>
+  <PageFrame style={{ ...base, background: color.white }}>
     <img
       src={duoDisplays}
       alt="iPhone Duo inner and outer displays"
@@ -231,7 +375,7 @@ const Duo: Page = () => (
         放入口袋。
       </h2>
 
-      <div style={{ display: 'flex', gap: 54, marginTop: 46 }}>
+      <div className="os-stagger" style={{ display: 'flex', gap: 54, marginTop: 46 }}>
         <div>
           <div style={{ fontSize: 68, lineHeight: 1, fontWeight: 700 }}>7.6″</div>
           <div style={{ marginTop: 12, fontSize: 27, color: color.muted }}>內螢幕</div>
@@ -250,11 +394,11 @@ const Duo: Page = () => (
       <Price>US$1,999 起</Price>
     </div>
     <Source>Apple Newsroom · iPhone Duo</Source>
-  </div>
+  </PageFrame>
 );
 
 const DuoEngineering: Page = () => (
-  <div style={{ ...base, background: color.white }}>
+  <PageFrame style={{ ...base, background: color.white }}>
     <div style={{ padding: '90px 120px', width: 800, position: 'relative', zIndex: 3 }}>
       <Eyebrow>iPhone Duo · Engineering</Eyebrow>
       <h2 style={{ margin: '24px 0 48px', fontFamily: 'var(--osd-font-display)', fontSize: 84, lineHeight: 1.05, fontWeight: 700, letterSpacing: '-0.055em' }}>
@@ -263,7 +407,7 @@ const DuoEngineering: Page = () => (
         與耐用設計
       </h2>
 
-      <div style={{ borderTop: `1px solid ${color.hairline}`, width: 690 }}>
+      <div className="os-stagger" style={{ borderTop: `1px solid ${color.hairline}`, width: 690 }}>
         <div style={{ padding: '30px 0', borderBottom: `1px solid ${color.hairline}` }}>
           <div style={{ fontSize: 42, fontWeight: 700 }}>Grade 5 鈦金屬</div>
           <div style={{ marginTop: 8, fontSize: 27, lineHeight: 1.45, color: color.muted }}>鏡面拋光機身，3D 列印鉸鏈外蓋</div>
@@ -281,11 +425,11 @@ const DuoEngineering: Page = () => (
 
     <img src={duoColors} alt="iPhone Duo colors" style={{ position: 'absolute', right: 38, top: 132, width: 980, height: 780, objectFit: 'cover', objectPosition: 'center' }} />
     <Source>Apple Newsroom · iPhone Duo design and durability</Source>
-  </div>
+  </PageFrame>
 );
 
 const DuoCamera: Page = () => (
-  <div style={{ ...base, background: color.black, color: color.white }}>
+  <PageFrame style={{ ...base, background: color.black, color: color.white }}>
     <img src={duoCamera} alt="Photo from the iPhone Duo Center Stage camera" style={{ position: 'absolute', left: 0, top: 0, width: 1040, height: 1080, objectFit: 'cover', objectPosition: 'center' }} />
     <div style={{ position: 'absolute', left: 800, top: 0, width: 420, height: 1080, background: 'linear-gradient(90deg, transparent, #000)' }} />
 
@@ -295,25 +439,25 @@ const DuoCamera: Page = () => (
         雙螢幕改變拍攝方式
       </h2>
 
-      <div style={{ display: 'grid', gap: 30, fontSize: 30, lineHeight: 1.42, color: 'rgba(255,255,255,0.72)' }}>
+      <div className="os-stagger" style={{ display: 'grid', gap: 30, fontSize: 30, lineHeight: 1.42, color: 'rgba(255,255,255,0.72)' }}>
         <div><span style={{ color: color.white, fontWeight: 700 }}>48MP Fusion 主相機</span><br />24MP 預設輸出，支援零快門延遲與光學品質 2 倍望遠</div>
         <div><span style={{ color: color.white, fontWeight: 700 }}>48MP Fusion 超廣角</span><br />支援微距，Center Stage 前鏡頭可自動擴展視角</div>
         <div><span style={{ color: color.white, fontWeight: 700 }}>4K 120 fps Dolby Vision</span><br />外螢幕可顯示預覽，機身可半折固定拍攝</div>
       </div>
     </div>
     <Source light>Apple Newsroom · iPhone Duo camera system</Source>
-  </div>
+  </PageFrame>
 );
 
 const A20Pro: Page = () => (
-  <div style={{ ...base, background: color.black, color: color.white }}>
+  <PageFrame style={{ ...base, background: color.black, color: color.white }}>
     <div style={{ padding: '90px 120px' }}>
       <Eyebrow light>A20 Pro · 2 nm</Eyebrow>
       <h2 style={{ margin: '24px 0 54px', fontFamily: 'var(--osd-font-display)', fontSize: 92, lineHeight: 1.03, fontWeight: 700, letterSpacing: '-0.06em' }}>
         晶片與散熱系統
       </h2>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 68, marginTop: 18 }}>
+      <div className="os-stagger" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 68, marginTop: 18 }}>
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.24)', paddingTop: 30 }}>
           <div style={{ fontSize: 104, lineHeight: 1, fontWeight: 700 }}>+20%</div>
           <div style={{ marginTop: 20, fontSize: 29, lineHeight: 1.45, color: 'rgba(255,255,255,0.64)' }}>6 核心 CPU<br />相較 A19 Pro</div>
@@ -328,17 +472,17 @@ const A20Pro: Page = () => (
         </div>
       </div>
 
-      <div style={{ marginTop: 72, paddingTop: 34, borderTop: '1px solid rgba(255,255,255,0.14)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 86 }}>
+      <div className="os-stagger" style={{ marginTop: 72, paddingTop: 34, borderTop: '1px solid rgba(255,255,255,0.14)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 86 }}>
         <div style={{ fontSize: 31, lineHeight: 1.5 }}><span style={{ fontWeight: 700 }}>50% 更多記憶體頻寬</span><br /><span style={{ color: 'rgba(255,255,255,0.62)' }}>支援裝置端 AI 與高負載圖形運算</span></div>
         <div style={{ fontSize: 31, lineHeight: 1.5 }}><span style={{ fontWeight: 700 }}>均熱板直接連接晶片封裝</span><br /><span style={{ color: 'rgba(255,255,255,0.62)' }}>Pro 持續效能最高提升 40%，Duo 提升 35%</span></div>
       </div>
     </div>
     <Source light>Apple Newsroom · A20 Pro and thermal management</Source>
-  </div>
+  </PageFrame>
 );
 
 const ProCamera: Page = () => (
-  <div style={{ ...base, background: color.black, color: color.white }}>
+  <PageFrame style={{ ...base, background: color.black, color: color.white }}>
     <img src={proLowLight} alt="Low-light photo captured on iPhone 18 Pro" style={{ position: 'absolute', right: 0, top: 0, width: 1030, height: 1080, objectFit: 'cover', objectPosition: 'center' }} />
     <div style={{ position: 'absolute', left: 670, top: 0, width: 420, height: 1080, background: 'linear-gradient(90deg, #000, transparent)' }} />
 
@@ -353,24 +497,24 @@ const ProCamera: Page = () => (
         六片雷射切割葉片由轉子控制，提供四段光圈。相機可自動調整，Pro controls 也可手動操作。
       </p>
 
-      <div style={{ marginTop: 52, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', width: 720, gap: 30 }}>
+      <div className="os-stagger" style={{ marginTop: 52, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', width: 720, gap: 30 }}>
         <div><div style={{ fontSize: 68, fontWeight: 700 }}>ƒ/1.48</div><div style={{ marginTop: 10, fontSize: 25, color: 'rgba(255,255,255,0.58)' }}>低光源</div></div>
         <div><div style={{ fontSize: 68, fontWeight: 700 }}>ƒ/1.8</div><div style={{ marginTop: 10, fontSize: 25, color: 'rgba(255,255,255,0.58)' }}>人像平衡</div></div>
         <div><div style={{ fontSize: 68, fontWeight: 700 }}>ƒ/4</div><div style={{ marginTop: 10, fontSize: 25, color: 'rgba(255,255,255,0.58)' }}>群體景深</div></div>
       </div>
 
-      <div style={{ marginTop: 54, fontSize: 29, lineHeight: 1.55, color: 'rgba(255,255,255,0.68)' }}>
+      <div className="os-stagger" style={{ marginTop: 54, fontSize: 29, lineHeight: 1.55, color: 'rgba(255,255,255,0.68)' }}>
         手動控制：光圈、快門速度、白平衡與直方圖
         <br />
         影片：拍攝後加入最高 60 fps 電影級效果
       </div>
     </div>
     <Source light>Apple Newsroom · iPhone 18 Pro variable aperture</Source>
-  </div>
+  </PageFrame>
 );
 
 const ProSystem: Page = () => (
-  <div style={{ ...base, background: color.black, color: color.white }}>
+  <PageFrame style={{ ...base, background: color.black, color: color.white }}>
     <img
       src={proColors}
       alt="iPhone 18 Pro color lineup"
@@ -393,7 +537,7 @@ const ProSystem: Page = () => (
         效能、連線與電池
       </h2>
 
-      <div style={{ marginTop: 42, display: 'grid', gap: 28, fontSize: 30, lineHeight: 1.4, color: 'rgba(255,255,255,0.7)' }}>
+      <div className="os-stagger" style={{ marginTop: 42, display: 'grid', gap: 28, fontSize: 30, lineHeight: 1.4, color: 'rgba(255,255,255,0.7)' }}>
         <div><span style={{ color: color.white, fontWeight: 700 }}>N1</span><br />Wi-Fi 7、Bluetooth 6 與 Thread</div>
         <div><span style={{ color: color.white, fontWeight: 700 }}>C2</span><br />上傳更快，能耗比 C1X 低 15%，美國支援 mmWave</div>
         <div><span style={{ color: color.white, fontWeight: 700 }}>36 / 45 小時</span><br />Pro 與 Pro Max 的影片播放時間</div>
@@ -405,13 +549,13 @@ const ProSystem: Page = () => (
       </div>
     </div>
     <Source light>Apple Newsroom · Pro platform and battery</Source>
-  </div>
+  </PageFrame>
 );
 
 const ReferenceImage: Page = () => (
-  <div style={{ ...base, background: color.black, color: color.white }}>
+  <PageFrame style={{ ...base, background: color.black, color: color.white }}>
     <img src={proReference} alt="Apple Reference Image comparison" style={{ position: 'absolute', right: 30, top: 118, width: 990, height: 660, objectFit: 'contain' }} />
-    <div style={{ position: 'absolute', right: 60, bottom: 90, width: 900, height: 120, background: 'radial-gradient(ellipse, rgba(143,54,82,0.28), transparent 68%)', filter: 'blur(22px)' }} />
+    <div className="os-glow" style={{ position: 'absolute', right: 60, bottom: 90, width: 900, height: 120, background: 'radial-gradient(ellipse, rgba(143,54,82,0.28), transparent 68%)', filter: 'blur(22px)' }} />
 
     <div style={{ position: 'relative', zIndex: 3, width: 820, padding: '90px 0 0 120px' }}>
       <Eyebrow light>iOS 27 · Image authenticity</Eyebrow>
@@ -422,7 +566,7 @@ const ReferenceImage: Page = () => (
         主相機感光元件可簽署每個像素。Reference 模式保留簽署過的感光元件資料，並透過 Private Cloud Compute 建立不可變更的參考影像。
       </p>
 
-      <div style={{ marginTop: 54, width: 640, borderTop: '1px solid rgba(255,255,255,0.22)', paddingTop: 28, fontSize: 28, lineHeight: 1.55, color: 'rgba(255,255,255,0.62)' }}>
+      <div className="os-stagger" style={{ marginTop: 54, width: 640, borderTop: '1px solid rgba(255,255,255,0.22)', paddingTop: 28, fontSize: 28, lineHeight: 1.55, color: 'rgba(255,255,255,0.62)' }}>
         Photos 可並列原始參考影像與編輯版本
         <br />
         Metadata 與即將支援的 SynthID 協助辨識 AI 編修
@@ -431,11 +575,11 @@ const ReferenceImage: Page = () => (
       </div>
     </div>
     <Source light>Apple Newsroom · Apple Reference Image and iOS 27</Source>
-  </div>
+  </PageFrame>
 );
 
 const Pricing: Page = () => (
-  <div style={{ ...base, background: 'var(--osd-bg)' }}>
+  <PageFrame style={{ ...base, background: 'var(--osd-bg)' }}>
     <div style={{ padding: '88px 120px' }}>
       <Eyebrow>U.S. pricing & availability</Eyebrow>
       <h2
@@ -451,7 +595,7 @@ const Pricing: Page = () => (
         美國售價與上市時間
       </h2>
 
-      <div style={{ background: color.white, borderRadius: 34, overflow: 'hidden', boxShadow: '0 18px 60px rgba(0,0,0,0.06)' }}>
+      <div className="os-stagger" style={{ background: color.white, borderRadius: 34, overflow: 'hidden', boxShadow: '0 18px 60px rgba(0,0,0,0.06)' }}>
         <div style={{ height: 94, padding: '0 54px', display: 'grid', gridTemplateColumns: '1.4fr 0.8fr 0.8fr 0.8fr', alignItems: 'center', fontSize: 23, fontWeight: 650, color: color.muted, borderBottom: `1px solid ${color.hairline}` }}>
           <div>MODEL</div><div>FROM</div><div>PRE-ORDER</div><div>AVAILABLE</div>
         </div>
@@ -483,8 +627,17 @@ const Pricing: Page = () => (
         <div>Apple 官方美國起售價</div>
       </div>
     </div>
-  </div>
+  </PageFrame>
 );
+
+Cover.transition = heroTransition;
+Duo.transition = heroTransition;
+DuoCamera.transition = photoTransition;
+A20Pro.transition = heroTransition;
+ProCamera.transition = photoTransition;
+ProSystem.transition = heroTransition;
+ReferenceImage.transition = photoTransition;
+Pricing.transition = heroTransition;
 
 export const meta: SlideMeta = {
   title: 'Apple Event 2026 · iPhone',
