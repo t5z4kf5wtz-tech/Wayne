@@ -1,9 +1,13 @@
 import type { DesignSystem, Page, SlideMeta } from '@open-slide/core';
 
+import duoCamera from './assets/duo-camera.jpg';
+import duoColors from './assets/duo-colors.jpg';
 import duoDisplays from './assets/duo-displays.jpg';
 import duoHero from './assets/duo-hero.jpg';
 import proColors from './assets/pro-colors.jpg';
 import proHero from './assets/pro-hero.jpg';
+import proLowLight from './assets/pro-low-light.jpg';
+import proReference from './assets/pro-reference.jpg';
 
 export const design: DesignSystem = {
   palette: {
@@ -249,7 +253,123 @@ const Duo: Page = () => (
   </div>
 );
 
-const Pro: Page = () => (
+const DuoEngineering: Page = () => (
+  <div style={{ ...base, background: color.white }}>
+    <div style={{ padding: '90px 120px', width: 800, position: 'relative', zIndex: 3 }}>
+      <Eyebrow>iPhone Duo · Engineering</Eyebrow>
+      <h2 style={{ margin: '24px 0 48px', fontFamily: 'var(--osd-font-display)', fontSize: 84, lineHeight: 1.05, fontWeight: 700, letterSpacing: '-0.055em' }}>
+        折疊結構
+        <br />
+        與耐用設計
+      </h2>
+
+      <div style={{ borderTop: `1px solid ${color.hairline}`, width: 690 }}>
+        <div style={{ padding: '30px 0', borderBottom: `1px solid ${color.hairline}` }}>
+          <div style={{ fontSize: 42, fontWeight: 700 }}>Grade 5 鈦金屬</div>
+          <div style={{ marginTop: 8, fontSize: 27, lineHeight: 1.45, color: color.muted }}>鏡面拋光機身，3D 列印鉸鏈外蓋</div>
+        </div>
+        <div style={{ padding: '30px 0', borderBottom: `1px solid ${color.hairline}` }}>
+          <div style={{ fontSize: 42, fontWeight: 700 }}>100+ 鉸鏈零件</div>
+          <div style={{ marginTop: 8, fontSize: 27, lineHeight: 1.45, color: color.muted }}>支撐螢幕展平，磁鐵陣列確保閉合</div>
+        </div>
+        <div style={{ padding: '30px 0' }}>
+          <div style={{ fontSize: 42, fontWeight: 700 }}>IP68 · Ceramic Shield 2</div>
+          <div style={{ marginTop: 8, fontSize: 27, lineHeight: 1.45, color: color.muted }}>外螢幕抗刮提升 3 倍，內層聚合物剛性提升最高 40%</div>
+        </div>
+      </div>
+    </div>
+
+    <img src={duoColors} alt="iPhone Duo colors" style={{ position: 'absolute', right: 38, top: 132, width: 980, height: 780, objectFit: 'cover', objectPosition: 'center' }} />
+    <Source>Apple Newsroom · iPhone Duo design and durability</Source>
+  </div>
+);
+
+const DuoCamera: Page = () => (
+  <div style={{ ...base, background: color.black, color: color.white }}>
+    <img src={duoCamera} alt="Photo from the iPhone Duo Center Stage camera" style={{ position: 'absolute', left: 0, top: 0, width: 1040, height: 1080, objectFit: 'cover', objectPosition: 'center' }} />
+    <div style={{ position: 'absolute', left: 800, top: 0, width: 420, height: 1080, background: 'linear-gradient(90deg, transparent, #000)' }} />
+
+    <div style={{ position: 'absolute', right: 105, top: 90, width: 720 }}>
+      <Eyebrow light>iPhone Duo · Camera</Eyebrow>
+      <h2 style={{ margin: '24px 0 44px', fontFamily: 'var(--osd-font-display)', fontSize: 80, lineHeight: 1.04, fontWeight: 700, letterSpacing: '-0.055em' }}>
+        雙螢幕改變拍攝方式
+      </h2>
+
+      <div style={{ display: 'grid', gap: 30, fontSize: 30, lineHeight: 1.42, color: 'rgba(255,255,255,0.72)' }}>
+        <div><span style={{ color: color.white, fontWeight: 700 }}>48MP Fusion 主相機</span><br />24MP 預設輸出，支援零快門延遲與光學品質 2 倍望遠</div>
+        <div><span style={{ color: color.white, fontWeight: 700 }}>48MP Fusion 超廣角</span><br />支援微距，Center Stage 前鏡頭可自動擴展視角</div>
+        <div><span style={{ color: color.white, fontWeight: 700 }}>4K 120 fps Dolby Vision</span><br />外螢幕可顯示預覽，機身可半折固定拍攝</div>
+      </div>
+    </div>
+    <Source light>Apple Newsroom · iPhone Duo camera system</Source>
+  </div>
+);
+
+const A20Pro: Page = () => (
+  <div style={{ ...base, background: color.black, color: color.white }}>
+    <div style={{ padding: '90px 120px' }}>
+      <Eyebrow light>A20 Pro · 2 nm</Eyebrow>
+      <h2 style={{ margin: '24px 0 54px', fontFamily: 'var(--osd-font-display)', fontSize: 92, lineHeight: 1.03, fontWeight: 700, letterSpacing: '-0.06em' }}>
+        晶片與散熱系統
+      </h2>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 68, marginTop: 18 }}>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.24)', paddingTop: 30 }}>
+          <div style={{ fontSize: 104, lineHeight: 1, fontWeight: 700 }}>+20%</div>
+          <div style={{ marginTop: 20, fontSize: 29, lineHeight: 1.45, color: 'rgba(255,255,255,0.64)' }}>6 核心 CPU<br />相較 A19 Pro</div>
+        </div>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.24)', paddingTop: 30 }}>
+          <div style={{ fontSize: 104, lineHeight: 1, fontWeight: 700 }}>+40%</div>
+          <div style={{ marginTop: 20, fontSize: 29, lineHeight: 1.45, color: 'rgba(255,255,255,0.64)' }}>7 核心 GPU<br />效能更高且更省電</div>
+        </div>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.24)', paddingTop: 30 }}>
+          <div style={{ fontSize: 104, lineHeight: 1, fontWeight: 700 }}>2×</div>
+          <div style={{ marginTop: 20, fontSize: 29, lineHeight: 1.45, color: 'rgba(255,255,255,0.64)' }}>雙 16 核心 Neural Engine<br />共 32 核心</div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 72, paddingTop: 34, borderTop: '1px solid rgba(255,255,255,0.14)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 86 }}>
+        <div style={{ fontSize: 31, lineHeight: 1.5 }}><span style={{ fontWeight: 700 }}>50% 更多記憶體頻寬</span><br /><span style={{ color: 'rgba(255,255,255,0.62)' }}>支援裝置端 AI 與高負載圖形運算</span></div>
+        <div style={{ fontSize: 31, lineHeight: 1.5 }}><span style={{ fontWeight: 700 }}>均熱板直接連接晶片封裝</span><br /><span style={{ color: 'rgba(255,255,255,0.62)' }}>Pro 持續效能最高提升 40%，Duo 提升 35%</span></div>
+      </div>
+    </div>
+    <Source light>Apple Newsroom · A20 Pro and thermal management</Source>
+  </div>
+);
+
+const ProCamera: Page = () => (
+  <div style={{ ...base, background: color.black, color: color.white }}>
+    <img src={proLowLight} alt="Low-light photo captured on iPhone 18 Pro" style={{ position: 'absolute', right: 0, top: 0, width: 1030, height: 1080, objectFit: 'cover', objectPosition: 'center' }} />
+    <div style={{ position: 'absolute', left: 670, top: 0, width: 420, height: 1080, background: 'linear-gradient(90deg, #000, transparent)' }} />
+
+    <div style={{ position: 'relative', zIndex: 3, width: 850, padding: '90px 0 0 120px' }}>
+      <Eyebrow light>iPhone 18 Pro · Camera</Eyebrow>
+      <h2 style={{ margin: '24px 0 42px', fontFamily: 'var(--osd-font-display)', fontSize: 82, lineHeight: 1.04, fontWeight: 700, letterSpacing: '-0.055em' }}>
+        48MP 可變光圈
+        <br />
+        Fusion 主相機
+      </h2>
+      <p style={{ margin: 0, width: 680, fontSize: 30, lineHeight: 1.5, color: 'rgba(255,255,255,0.7)' }}>
+        六片雷射切割葉片由轉子控制，提供四段光圈。相機可自動調整，Pro controls 也可手動操作。
+      </p>
+
+      <div style={{ marginTop: 52, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', width: 720, gap: 30 }}>
+        <div><div style={{ fontSize: 68, fontWeight: 700 }}>ƒ/1.48</div><div style={{ marginTop: 10, fontSize: 25, color: 'rgba(255,255,255,0.58)' }}>低光源</div></div>
+        <div><div style={{ fontSize: 68, fontWeight: 700 }}>ƒ/1.8</div><div style={{ marginTop: 10, fontSize: 25, color: 'rgba(255,255,255,0.58)' }}>人像平衡</div></div>
+        <div><div style={{ fontSize: 68, fontWeight: 700 }}>ƒ/4</div><div style={{ marginTop: 10, fontSize: 25, color: 'rgba(255,255,255,0.58)' }}>群體景深</div></div>
+      </div>
+
+      <div style={{ marginTop: 54, fontSize: 29, lineHeight: 1.55, color: 'rgba(255,255,255,0.68)' }}>
+        手動控制：光圈、快門速度、白平衡與直方圖
+        <br />
+        影片：拍攝後加入最高 60 fps 電影級效果
+      </div>
+    </div>
+    <Source light>Apple Newsroom · iPhone 18 Pro variable aperture</Source>
+  </div>
+);
+
+const ProSystem: Page = () => (
   <div style={{ ...base, background: color.black, color: color.white }}>
     <img
       src={proColors}
@@ -259,34 +379,58 @@ const Pro: Page = () => (
     <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, #000 0%, rgba(0,0,0,0.98) 35%, rgba(0,0,0,0.38) 70%, rgba(0,0,0,0.06) 100%)' }} />
 
     <div style={{ position: 'relative', zIndex: 3, width: 880, padding: '92px 0 0 120px' }}>
-      <Eyebrow light>iPhone 18 Pro · Pro Max</Eyebrow>
+      <Eyebrow light>iPhone 18 Pro · Platform</Eyebrow>
       <h2
         style={{
           margin: '26px 0 34px',
           fontFamily: 'var(--osd-font-display)',
-          fontSize: 104,
+          fontSize: 88,
           lineHeight: 1.02,
           fontWeight: 700,
           letterSpacing: '-0.06em',
         }}
       >
-        光圈，第一次
-        <br />
-        交給你。
+        效能、連線與電池
       </h2>
 
-      <div style={{ marginTop: 46, display: 'grid', gap: 26, fontSize: 31, lineHeight: 1.35, color: 'rgba(255,255,255,0.72)' }}>
-        <div><span style={{ color: color.white, fontWeight: 650 }}>48MP</span> 可變光圈 Fusion 主相機</div>
-        <div><span style={{ color: color.white, fontWeight: 650 }}>A20 Pro</span> + 新一代均熱板</div>
-        <div><span style={{ color: color.white, fontWeight: 650 }}>36 / 45 小時</span> 影片播放</div>
-        <div>黑 · 銀 · 冰川 · 勃艮第</div>
+      <div style={{ marginTop: 42, display: 'grid', gap: 28, fontSize: 30, lineHeight: 1.4, color: 'rgba(255,255,255,0.7)' }}>
+        <div><span style={{ color: color.white, fontWeight: 700 }}>N1</span><br />Wi-Fi 7、Bluetooth 6 與 Thread</div>
+        <div><span style={{ color: color.white, fontWeight: 700 }}>C2</span><br />上傳更快，能耗比 C1X 低 15%，美國支援 mmWave</div>
+        <div><span style={{ color: color.white, fontWeight: 700 }}>36 / 45 小時</span><br />Pro 與 Pro Max 的影片播放時間</div>
+        <div><span style={{ color: color.white, fontWeight: 700 }}>約 15 分鐘充至 50%</span><br />適用 iPhone 18 Pro 有線充電</div>
       </div>
 
       <div style={{ marginTop: 48 }}>
         <Price dark>Pro US$1,199 · Pro Max US$1,299 起</Price>
       </div>
     </div>
-    <Source light>Apple Newsroom · iPhone 18 Pro lineup</Source>
+    <Source light>Apple Newsroom · Pro platform and battery</Source>
+  </div>
+);
+
+const ReferenceImage: Page = () => (
+  <div style={{ ...base, background: color.black, color: color.white }}>
+    <img src={proReference} alt="Apple Reference Image comparison" style={{ position: 'absolute', right: 30, top: 118, width: 990, height: 660, objectFit: 'contain' }} />
+    <div style={{ position: 'absolute', right: 60, bottom: 90, width: 900, height: 120, background: 'radial-gradient(ellipse, rgba(143,54,82,0.28), transparent 68%)', filter: 'blur(22px)' }} />
+
+    <div style={{ position: 'relative', zIndex: 3, width: 820, padding: '90px 0 0 120px' }}>
+      <Eyebrow light>iOS 27 · Image authenticity</Eyebrow>
+      <h2 style={{ margin: '24px 0 40px', fontFamily: 'var(--osd-font-display)', fontSize: 82, lineHeight: 1.04, fontWeight: 700, letterSpacing: '-0.055em' }}>
+        Apple Reference Image
+      </h2>
+      <p style={{ margin: 0, width: 660, fontSize: 31, lineHeight: 1.5, color: 'rgba(255,255,255,0.72)' }}>
+        主相機感光元件可簽署每個像素。Reference 模式保留簽署過的感光元件資料，並透過 Private Cloud Compute 建立不可變更的參考影像。
+      </p>
+
+      <div style={{ marginTop: 54, width: 640, borderTop: '1px solid rgba(255,255,255,0.22)', paddingTop: 28, fontSize: 28, lineHeight: 1.55, color: 'rgba(255,255,255,0.62)' }}>
+        Photos 可並列原始參考影像與編輯版本
+        <br />
+        Metadata 與即將支援的 SynthID 協助辨識 AI 編修
+        <br />
+        Siri AI 於 iOS 27 以 beta 形式推出
+      </div>
+    </div>
+    <Source light>Apple Newsroom · Apple Reference Image and iOS 27</Source>
   </div>
 );
 
@@ -347,4 +491,4 @@ export const meta: SlideMeta = {
   createdAt: '2026-09-11T01:54:20.921Z',
 };
 
-export default [Cover, Lineup, Duo, Pro, Pricing] satisfies Page[];
+export default [Cover, Lineup, Duo, DuoEngineering, DuoCamera, A20Pro, ProCamera, ProSystem, ReferenceImage, Pricing] satisfies Page[];
