@@ -1,0 +1,219 @@
+import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
+import { Step, Steps, useIsActivePage, type DesignSystem, type Page, type SlideMeta, type SlideTransition } from '@open-slide/core';
+import seriesHero from './assets/series-hero.jpg';
+import readiness from './assets/readiness.jpg';
+import ceramic from './assets/ceramic.jpg';
+import ceramicBlue from './assets/ceramic-blue.jpg';
+import ultraHero from './assets/ultra-hero.jpg';
+import ultraSensor from './assets/ultra-sensor.jpg';
+import ultraRun from './assets/ultra-run.jpg';
+import sound from './assets/sound.jpg';
+import recap from './assets/recap.jpg';
+import airpodsHero from './assets/airpods-hero.jpg';
+import airpodsCase from './assets/airpods-case.jpg';
+import airpodsLife from './assets/airpods-life.jpg';
+
+export const design: DesignSystem = {
+  palette: { bg: '#000000', text: '#f5f5f7', accent: '#b3f870' },
+  fonts: {
+    display: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang TC", sans-serif',
+    body: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang TC", sans-serif',
+  },
+  typeScale: { hero: 140, body: 34 },
+  radius: 28,
+};
+const ease = 'cubic-bezier(.16,1,.3,1)';
+export const transition: SlideTransition = {
+  duration: 260,
+  exit: { duration: 160, easing: 'ease-in', keyframes: [{ opacity: 1 }, { opacity: 0 }] },
+  enter: { duration: 260, delay: 80, easing: ease, keyframes: [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }] },
+};
+const chapter: SlideTransition = {
+  duration: 280,
+  exit: { duration: 180, easing: 'ease-in', keyframes: [{ opacity: 1 }, { opacity: 0 }] },
+  enter: { duration: 280, delay: 100, easing: ease, keyframes: [{ opacity: 0, transform: 'scale(.98)' }, { opacity: 1, transform: 'scale(1)' }] },
+};
+const css = `
+@keyframes wear-rise {from {opacity:0;transform:translateY(24px);filter:blur(5px)} to {opacity:1;transform:translateY(0);filter:blur(0)}}
+@keyframes wear-image {from {opacity:0;transform:scale(1.045)} to {opacity:1;transform:scale(1)}}
+@keyframes wear-glow {from {opacity:.15} to {opacity:.55}}
+.wear-page.active .wear-title {animation:wear-rise 850ms ${ease} both}
+.wear-page.active .wear-sub {animation:wear-rise 850ms 140ms ${ease} both}
+.wear-page.active .wear-picture {animation:wear-image 1500ms 100ms ${ease} both}
+.wear-page.active .wear-glow {animation:wear-glow 2600ms ease-in-out alternate infinite}
+.wear-page h1,.wear-page h2,.wear-page p {margin:0}
+@media (prefers-reduced-motion:reduce){.wear-page *{animation:none!important;transition:none!important}}
+`;
+const Frame = ({ children, light = false }: { children: ReactNode; light?: boolean }) => {
+  const active = useIsActivePage();
+  return <section className={`wear-page${active ? ' active' : ''}`} style={{ width: '100%', height: '100%', position: 'relative', textAlign: 'left', background: light ? '#fafafa' : 'var(--osd-bg)', color: light ? '#1d1d1f' : 'var(--osd-text)', fontFamily: 'var(--osd-font-body)', letterSpacing: '-.035em' }}><style>{css}</style>{children}</section>;
+};
+const At = ({ children, x = 120, y = 100, w = 1680, style }: { children: ReactNode; x?: number; y?: number; w?: number; style?: CSSProperties }) => <div style={{ position: 'absolute', left: x, top: y, width: w, ...style }}>{children}</div>;
+const Heading = ({ product, title, subtitle }: { product: string; title: ReactNode; subtitle?: string }) => <At><div style={{ fontSize: 38, fontWeight: 600, marginBottom: 28 }}>{product}</div><h2 className="wear-title" style={{ fontSize: 68, fontWeight: 650, lineHeight: 1.15 }}>{title}</h2>{subtitle && <p className="wear-sub" style={{ fontSize: 32, lineHeight: 1.5, color: '#86868b', marginTop: 24 }}>{subtitle}</p>}</At>;
+const Photo = ({ src, alt, x, y, w, h, fit = 'contain', style }: { src: string; alt: string; x: number; y: number; w: number; h: number; fit?: 'contain' | 'cover'; style?: CSSProperties }) => <div style={{ position: 'absolute', left: x, top: y, width: w, height: h, ...style }}><img className="wear-picture" src={src} alt={alt} style={{ width: '100%', height: '100%', objectFit: fit, borderRadius: 24 }} /></div>;
+const Fine = ({ children }: { children: ReactNode }) => <At y={994}><p style={{ fontSize: 23, lineHeight: 1.4, color: '#86868b', letterSpacing: '-.015em' }}>{children}</p></At>;
+const Count = ({ value }: { value: number }) => {
+  const active = useIsActivePage();
+  const [n, setN] = useState(value);
+  useEffect(() => {
+    if (!active || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setN(value); return; }
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now: number) => { const t = Math.min(1, (now - start) / 1100); setN(Math.round(value * (1 - Math.pow(1 - t, 4)))); if (t < 1) raf = requestAnimationFrame(tick); };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [active, value]);
+  return <span style={{ fontVariantNumeric: 'tabular-nums' }}>{active ? n : value}</span>;
+};
+const Metric = ({ value, unit, label, detail, size = 146, accent }: { value: number; unit: string; label: string; detail?: string; size?: number; accent?: string }) => <div><div style={{ fontSize: size, lineHeight: 1.05, fontWeight: 650, color: accent }}><Count value={value} /><span style={{ fontSize: 36, marginLeft: 10 }}>{unit}</span></div><div style={{ fontSize: 32, fontWeight: 550, marginTop: 22 }}>{label}</div>{detail && <p style={{ fontSize: 25, color: '#86868b', lineHeight: 1.5, marginTop: 12 }}>{detail}</p>}</div>;
+const Feature = ({ title, text }: { title: string; text: string }) => <div style={{ marginBottom: 42 }}><h3 style={{ fontSize: 36, margin: '0 0 14px', fontWeight: 600 }}>{title}</h3><p style={{ fontSize: 30, color: '#86868b', lineHeight: 1.5 }}>{text}</p></div>;
+
+const Series: Page = () => <Frame light>
+  <Photo src={seriesHero} alt="Apple Watch Series 12 正面與全新健康感測系統" x={480} y={30} w={1140} h={710} />
+  <At y={770}><h1 className="wear-title" style={{ fontSize: 136, fontWeight: 650, lineHeight: 1.1 }}>Apple Watch Series 12</h1><p className="wear-sub" style={{ fontSize: 34, color: '#86868b', marginTop: 24 }}>全新健康感測系統，搭配 S11 晶片</p></At>
+</Frame>;
+const Sensing: Page = () => <Frame>
+  <Heading product="Apple Watch Series 12" title="更頻繁的量測，更完整的身體訊號" subtitle="重新設計光學與電極式心率感測器，搭配更大、更省電的綠光 LED。" />
+  <At y={410} w={1680} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 65 }}><Steps>
+    <Step><Metric value={5} unit="秒" label="一次背景心率量測" detail="全天持續收集" accent="#b3f870" /></Step>
+    <Step><Metric value={24} unit="倍" label="HRV 量測頻率" detail="相較 Series 11" accent="#b3f870" /></Step>
+    <Step><div><div style={{ fontSize: 140, fontWeight: 650 }}>S11</div><p style={{ fontSize: 32, marginTop: 24 }}>感測與運算協同設計</p><p style={{ fontSize: 25, color: '#86868b', marginTop: 16 }}>支援新的步數演算法</p></div></Step>
+  </Steps></At>
+  <Fine>Recovery HRV 用於觀察每日壓力與恢復，Overall HRV 提供較長期的健康趨勢。</Fine>
+</Frame>;
+const Readiness: Page = () => <Frame light>
+  <Heading product="Apple Watch Series 12" title="Readiness 身體準備程度" subtitle="分析近期活動、訓練負荷、生命徵象與睡眠，提供 0–10 分的每日評估。" />
+  <Photo src={readiness} alt="Series 12 的三種 Readiness 準備程度畫面" x={280} y={330} w={1360} h={530} />
+  <At y={893} style={{ display: 'flex', gap: 120 }}><Steps><Step><div style={{ fontSize: 32 }}>隨白天新資料更新</div></Step><Step><div style={{ fontSize: 32 }}>顯示影響分數的因素</div></Step></Steps></At>
+</Frame>;
+const Materials: Page = () => <Frame light>
+  <Heading product="Apple Watch Series 12" title="42 與 46 mm，三種錶殼材質" />
+  <Photo src={ceramic} alt="珍珠白陶瓷 Series 12" x={870} y={250} w={410} h={650} />
+  <Photo src={ceramicBlue} alt="夜藍色陶瓷 Series 12" x={1350} y={250} w={410} h={650} />
+  <At y={350} w={660}><Steps>
+    <Step><Feature title="鋁金屬" text="深古銅、黑、淺金與太空灰，配備 Ceramic Shield 2。" /></Step>
+    <Step><Feature title="鈦金屬與陶瓷" text="鈦金屬提供金色與原色，陶瓷提供珍珠白與夜藍色。" /></Step>
+    <Step><Feature title="WR 50M / IP6X" text="具備 50 公尺防水等級與防塵能力。" /></Step>
+  </Steps></At>
+  <Fine>鋁金屬款玻璃強韌度較前代 Ion-X 提升 60%（Apple 測試）。防水等級不等同建議下潛深度。</Fine>
+</Frame>;
+const SeriesBattery: Page = () => <Frame light>
+  <Heading product="Apple Watch Series 12" title="24 小時日常續航" />
+  <At y={325}><div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 140 }}><Metric value={24} unit="小時" label="一般使用，最長" size={230} /><Metric value={10} unit="小時" label="戶外體能訓練，最長" detail="比前代增加 25%" size={230} /></div></At>
+  <At y={790}><Steps><Step><div style={{ borderTop: '1px solid #d2d2d7', paddingTop: 42, fontSize: 44 }}>充電 15 分鐘，增加最長 12 小時續航</div></Step></Steps></At>
+  <Fine>電池續航依設定、使用方式與環境而異，數值依 Apple 測試條件。</Fine>
+</Frame>;
+const Ultra: Page = () => <Frame>
+  <Photo src={ultraHero} alt="Apple Watch Ultra 4 鈦金屬錶殼與數位錶冠" x={220} y={40} w={1480} h={700} />
+  <At y={770}><h1 className="wear-title" style={{ fontSize: 140, fontWeight: 650, lineHeight: 1.1 }}>Apple Watch Ultra 4</h1><p className="wear-sub" style={{ fontSize: 34, color: '#86868b', marginTop: 26 }}>49 mm 鈦金屬，為長時間運動與戶外探索設計</p></At>
+</Frame>;
+const UltraBattery: Page = () => <Frame>
+  <div className="wear-glow" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 35% 40%, #263e16, transparent 65%)' }} />
+  <At><div style={{ fontSize: 38 }}>Apple Watch Ultra 4</div><div className="wear-title" style={{ fontSize: 310, lineHeight: 1.1, fontWeight: 650, marginTop: 65 }}><Count value={50} /><span style={{ fontSize: 52 }}>小時</span></div><h2 style={{ fontSize: 60, lineHeight: 1.2, marginTop: 12 }}>一般使用，最長超過兩天</h2></At>
+  <At y={730} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}><Steps><Step><Metric value={84} unit="小時" label="低耗電模式，最長" size={106} /></Step><Step><Metric value={18} unit="小時" label="充電 15 分鐘增加的續航，最長" size={106} /></Step></Steps></At>
+  <Fine>不同模式採不同測試條件，不代表同一負載下的直接比較。</Fine>
+</Frame>;
+const UltraWorkout: Page = () => <Frame>
+  <Photo src={ultraRun} alt="佩戴 Ultra 4 的戶外跑者" x={990} y={0} w={930} h={1080} fit="cover" />
+  <At w={790}><div style={{ fontSize: 38, marginBottom: 35 }}>Apple Watch Ultra 4</div><h2 className="wear-title" style={{ fontSize: 74, lineHeight: 1.18 }}>長距離訓練，<br />兩種續航模式</h2></At>
+  <At y={405} w={760}><Steps><Step><Metric value={25} unit="小時" label="Extended Workout" detail="完整 GPS 與心率讀值，最長" size={120} /></Step><Step><div style={{ marginTop: 48 }}><Metric value={45} unit="小時" label="Max Extended Workout" detail="適用戶外跑步、步行與健行，最長" size={120} /></div></Step></Steps></At>
+  <At y={1000} w={760}><p style={{ fontSize: 23, color: '#86868b' }}>Max 模式仍每秒記錄 GPS，其他量測依模式調整。</p></At>
+</Frame>;
+const UltraHardware: Page = () => <Frame>
+  <Heading product="Apple Watch Ultra 4" title="大螢幕，與全新感測系統" />
+  <Photo src={ultraSensor} alt="Ultra 4 背面的心率感測器" x={960} y={275} w={760} h={650} />
+  <At y={340} w={740}><Steps>
+    <Step><Feature title="最高 3,000 尼特" text="廣視角常亮 Retina 顯示器。" /></Step>
+    <Step><Feature title="S11 + Health Sensing System" text="背景心率每 5 秒量測，支援 Readiness 與 Recovery HRV。" /></Step>
+    <Step><Feature title="原色與黑色鈦金屬" text="搭配 Trail Loop、Alpine Loop 或全新半透明 Ocean Band。" /></Step>
+  </Steps></At>
+</Frame>;
+const AudioIntelligence: Page = () => <Frame>
+  <Heading product="Apple Watch Series 12 / Ultra 4" title="Audio Intelligence" subtitle="S11 的 Secure Exclave 以隔離硬體處理聲音，處理後刪除原始音訊。" />
+  <Photo src={sound} alt="Apple Watch 的聲音辨識提醒" x={250} y={360} w={530} h={415} />
+  <Photo src={recap} alt="Siri Recap 在 Apple Watch 與 iPhone 的顯示" x={1000} y={360} w={670} h={415} />
+  <At y={825} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 100 }}><Steps>
+    <Step><Feature title="Sound Recognition" text="偵測門鈴、警報等重要聲音。" /></Step>
+    <Step><Feature title="Live Rewind / Siri Recap" text="回看前 15 秒文字，或保留談話重點摘要。" /></Step>
+  </Steps></At>
+  <Fine>Live Rewind、Siri Recap 預計 2026 年稍晚以 beta 推出，需使用者啟用，支援範圍依語言與地區。</Fine>
+</Frame>;
+const AirPods: Page = () => <Frame light>
+  <Photo src={airpodsHero} alt="AirPods 5 與充電盒" x={625} y={45} w={1040} h={735} />
+  <At y={775}><h1 className="wear-title" style={{ fontSize: 150, fontWeight: 650, lineHeight: 1 }}>AirPods 5</h1><p className="wear-sub" style={{ fontSize: 34, color: '#86868b', marginTop: 30 }}>開放式配戴，兩款皆支援主動降噪</p></At>
+</Frame>;
+const Noise: Page = () => <Frame>
+  <Photo src={airpodsLife} alt="在餐廳使用 AirPods 5" x={1020} y={0} w={900} h={1080} fit="cover" />
+  <At w={790}><div style={{ fontSize: 38 }}>AirPods 5</div><div className="wear-title" style={{ fontSize: 245, fontWeight: 650, marginTop: 85, lineHeight: 1.1 }}><Count value={50} /><span style={{ fontSize: 100 }}>%</span></div><h2 style={{ fontSize: 65, marginTop: 28 }}>更多外部噪音消除</h2><p style={{ fontSize: 30, color: '#a1a1a6', lineHeight: 1.5, marginTop: 30 }}>相較 AirPods 4 主動降噪款，最高提升幅度。</p></At>
+  <At y={745} w={750}><Steps><Step><Feature title="多氣孔聲學架構" text="搭配更新的運算音訊演算法。" /></Step></Steps></At>
+  <At y={1000} w={790}><p style={{ fontSize: 23, color: '#86868b' }}>依 Apple IEC 60268-24 測試，效果依配戴與環境而異。</p></At>
+</Frame>;
+const Listening: Page = () => <Frame light>
+  <Heading product="AirPods 5" title="聆聽、對話與跨語言溝通" />
+  <At y={340} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 120 }}><Steps>
+    <Step><Feature title="Adaptive Audio" text="依環境混合通透模式與主動降噪。" /></Step>
+    <Step><Feature title="Conversation Awareness" text="開口說話時，自動降低播放音量。" /></Step>
+    <Step><Feature title="新一代 Adaptive EQ" text="適應不同耳型，支援個人化空間音訊。" /></Step>
+    <Step><Feature title="Live Translation" text="搭配相容 iPhone、Apple Intelligence 與下載的語言。" /></Step>
+  </Steps></At>
+  <At y={790}><div className="wear-sub" style={{ fontSize: 46, borderTop: '1px solid #d2d2d7', paddingTop: 45 }}>點頭或搖頭，回應 Siri</div></At>
+  <Fine>翻譯並非所有語言／地區皆支援。Siri AI 隨 iOS 27 以 beta 推出，初期為英文。</Fine>
+</Frame>;
+const AirPodsBattery: Page = () => <Frame light>
+  <Heading product="AirPods 5" title="兩種充電盒，功能有別" />
+  <Photo src={airpodsCase} alt="AirPods 5 無線充電盒與充電器" x={1080} y={300} w={690} h={570} />
+  <At y={340} w={870} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 50 }}><Steps>
+    <Step><Metric value={4} unit="小時" label="標準版，ANC 開啟" detail="單次充電最長續航" size={170} /></Step>
+    <Step><Metric value={5} unit="小時" label="無線盒版，ANC 開啟" detail="含充電盒合計最長 22 小時" size={170} /></Step>
+  </Steps></At>
+  <At y={770} w={900}><Feature title="無線盒版新增滑動音量控制" text="支援 Apple Watch、Qi 無線充電與 USB-C。兩款皆具 IP57 防塵、防汗與防水等級。" /></At>
+  <Fine>5／22 小時僅適用無線充電盒版本，以上續航皆為 ANC 開啟條件。</Fine>
+</Frame>;
+const PriceRow = ({ name, price, detail }: { name: string; price: string; detail: string }) => <tr><td style={{ padding: '30px 0', fontSize: 36, fontWeight: 550 }}>{name}</td><td style={{ fontSize: 48, fontWeight: 600, textAlign: 'right' }}>{price}</td><td style={{ fontSize: 29, color: '#86868b', paddingLeft: 95 }}>{detail}</td></tr>;
+const Pricing: Page = () => <Frame>
+  <Heading product="U.S. Pricing" title="美國售價，一次看懂" subtitle="2026 年 9 月 9 日開放預購，9 月 18 日正式開賣。" />
+  <At y={350}><table style={{ width: '100%', borderCollapse: 'collapse' }}><thead><tr style={{ color: '#86868b', fontSize: 24, textAlign: 'left', borderBottom: '1px solid #424245' }}><th style={{ paddingBottom: 22 }}>產品</th><th style={{ textAlign: 'right' }}>US$ 起</th><th style={{ paddingLeft: 95 }}>重點差異</th></tr></thead><tbody>
+    <PriceRow name="Apple Watch Series 12" price="$399" detail="42 / 46 mm，日常健康與運動" />
+    <PriceRow name="Apple Watch Ultra 4" price="$799" detail="49 mm，較長續航與戶外能力" />
+    <PriceRow name="AirPods 5" price="$129" detail="ANC，USB-C 充電盒" />
+    <PriceRow name="AirPods 5 無線充電盒版" price="$149" detail="無線充電，滑動調音量" />
+  </tbody></table></At>
+  <Fine>Apple 官方美國起售價，未含銷售稅。Apple Watch 材質、尺寸與錶帶配置會影響價格。</Fine>
+</Frame>;
+const Timing: Page = () => <Frame>
+  <Heading product="Availability" title="硬體與軟體，分批到位" />
+  <At y={350} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 90 }}><Steps>
+    <Step><div><div style={{ fontSize: 105, fontWeight: 650 }}>09.14</div><h3 style={{ fontSize: 36, marginTop: 32 }}>watchOS 27 / iOS 27</h3><p style={{ fontSize: 30, lineHeight: 1.6, color: '#86868b' }}>Siri AI 以 beta 推出，初期英文，需相容裝置。</p></div></Step>
+    <Step><div><div style={{ fontSize: 105, fontWeight: 650 }}>09.18</div><h3 style={{ fontSize: 36, marginTop: 32 }}>新款 Watch / AirPods</h3><p style={{ fontSize: 30, lineHeight: 1.6, color: '#86868b' }}>Series 12、Ultra 4 與 AirPods 5 正式開賣。</p></div></Step>
+    <Step><div><div style={{ fontSize: 100, fontWeight: 650 }}>稍晚</div><h3 style={{ fontSize: 36, marginTop: 32 }}>Health / Audio Intelligence</h3><p style={{ fontSize: 30, lineHeight: 1.6, color: '#86868b' }}>新版健康 App、Health Age，以及 Live Rewind、Siri Recap beta。</p></div></Step>
+  </Steps></At>
+  <At y={858}><p style={{ fontSize: 30, color: '#86868b' }}>健康 App 新功能先從美式英文開始，AI 與健康功能依地區、語言與裝置而異。</p></At>
+  <Fine>資料來源：Apple Newsroom 2026/09/09 與 Apple 美國產品頁。核對日期：2026/09/12。</Fine>
+</Frame>;
+
+Series.transition = chapter;
+Ultra.transition = chapter;
+AirPods.transition = chapter;
+const seriesSource = 'https://www.apple.com/newsroom/2026/09/introducing-apple-watch-series-12-with-the-all-new-health-sensing-system/';
+const ultraSource = 'https://www.apple.com/newsroom/2026/09/apple-unveils-apple-watch-ultra-4/';
+const airpodsSource = 'https://www.apple.com/newsroom/2026/09/apple-introduces-airpods-5-with-best-in-class-open-ear-active-noise-cancellation/';
+export const notes = [
+  `產品與圖片來源：${seriesSource}`,
+  `資料：${seriesSource} 與 https://www.apple.com/apple-watch-series-12/。量測頻率不是準確度提升倍數。`,
+  `產品與圖片來源：${seriesSource}。Readiness 是日常健康／運動指標。`,
+  `產品與圖片來源：${seriesSource}。防護規格：https://www.apple.com/apple-watch-series-12/。`,
+  `資料：${seriesSource}。續航為最長值，依 Apple 的特定測試條件。`,
+  `產品與圖片來源：${ultraSource}。尺寸：https://www.apple.com/apple-watch-ultra-4/。`,
+  `資料：${ultraSource}。50 小時為一般使用，84 小時為低耗電模式，不能互換。`,
+  `產品與圖片來源：${ultraSource}。25 小時為 Extended Workout，45 小時為 Max Extended Workout。`,
+  `圖片與感測資料：${ultraSource}。螢幕規格：https://www.apple.com/apple-watch-ultra-4/。`,
+  `圖片與功能來源：${seriesSource} 及 ${ultraSource}。Live Rewind 和 Siri Recap 於 2026 年稍晚推出 beta。`,
+  `產品與圖片來源：${airpodsSource}`,
+  `產品與圖片來源：${airpodsSource}。50% 是相較 AirPods 4 with ANC 的最高噪音消除改善，非絕對安靜程度。`,
+  `資料：${airpodsSource}。Live Translation 與 Siri AI 需相容裝置，依語言及地區支援。`,
+  `圖片：${airpodsSource}。版本規格：https://www.apple.com/airpods-5/。所有續航標示均使用 ANC 開啟條件。`,
+  `官方美國價格及日期：${seriesSource}\n${ultraSource}\n${airpodsSource}。起售價未含銷售稅。`,
+  `推出時程：${seriesSource}\n${ultraSource}\n${airpodsSource}。原始 iPhone 章節參考：https://iphone-duo-slide.vercel.app/s/apple-event-2026-09。`,
+];
+export const meta: SlideMeta = { title: 'Apple 秋季發表會 2026 · Apple Watch 與 AirPods 5', createdAt: '2026-09-12T02:22:51.764Z' };
+export default [Series, Sensing, Readiness, Materials, SeriesBattery, Ultra, UltraBattery, UltraWorkout, UltraHardware, AudioIntelligence, AirPods, Noise, Listening, AirPodsBattery, Pricing, Timing] satisfies Page[];
