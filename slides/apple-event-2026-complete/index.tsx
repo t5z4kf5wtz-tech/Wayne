@@ -83,7 +83,47 @@ const Feature = ({ title, text }: { title: string; text: string }) => <div style
 const EventCover: Page = () => <Frame>
   <At y={155}><div className="wear-sub" style={{ fontSize: 32, color: '#86868b' }}>APPLE EVENT / SEPTEMBER 9, 2026</div><h1 className="wear-title" style={{ fontSize: 154, fontWeight: 650, lineHeight: 1.12, marginTop: 55 }}>Apple 秋季發表會</h1><p className="wear-sub" style={{ fontSize: 42, marginTop: 34, color: '#a1a1a6' }}>iPhone、Apple Watch 與 AirPods</p></At>
   <At y={695} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 100 }}><Steps><Step><Feature title="iPhone Duo / 18 Pro" text="折疊螢幕、可變光圈與 A20 Pro" /></Step><Step><Feature title="Series 12 / Ultra 4" text="全新健康感測系統與 S11" /></Step><Step><Feature title="AirPods 5" text="開放式主動降噪與智慧音訊" /></Step></Steps></At>
-  <Fine>產品特色、技術規格與美國起售價。資料核對：2026/09/12。</Fine>
+  <Fine>20 頁精華版。產品特色、核心規格與美國起售價。非 Apple 官方簡報。</Fine>
+</Frame>;
+const OverviewColumn = ({ name, models, purpose, highlight }: { name: string; models: string; purpose: string; highlight: string }) => <div><h3 style={{ fontSize: 58, margin: 0, fontWeight: 650 }}>{name}</h3><p style={{ fontSize: 28, color: '#86868b', marginTop: 22 }}>{models}</p><p style={{ fontSize: 36, lineHeight: 1.5, marginTop: 56 }}>{purpose}</p><p style={{ fontSize: 32, lineHeight: 1.6, color: '#a1a1a6', marginTop: 32 }}>{highlight}</p></div>;
+const ProductOverview: Page = () => <Frame>
+  <Heading product="產品總覽" title="三大產品，各自的升級重點" />
+  <At y={350} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 85 }}>
+    <OverviewColumn name="iPhone" models="Duo / 18 Pro / Pro Max" purpose="行動工作與影像創作" highlight="Duo 展開雙 App 工作空間。Pro 以可變光圈控制景深，共用 A20 Pro。" />
+    <OverviewColumn name="Apple Watch" models="Series 12 / Ultra 4" purpose="日常健康與戶外運動" highlight="Series 聚焦健康感測。Ultra 提供更長續航，支援長距離訓練。" />
+    <OverviewColumn name="AirPods" models="AirPods 5" purpose="日常聆聽與通話" highlight="開放式配戴加入主動降噪，依環境調整音訊，提供兩種充電盒。" />
+  </At>
+  <At y={880}><p className="wear-sub" style={{ fontSize: 32, color: '#b3f870' }}>iPhone 深入介紹，搭配 Watch 與 AirPods 核心亮點。</p></At>
+</Frame>;
+const SeriesCompact: Page = () => <Frame light>
+  <Heading product="Apple Watch Series 12" title="日常健康，掌握恢復狀態" />
+  <Photo src={seriesHero} alt="Apple Watch Series 12 與健康感測器" x={910} y={300} w={860} h={575} />
+  <At y={330} w={700}>
+    <Feature title="S11 與全新健康感測系統" text="更頻繁收集心率與 HRV，觀察壓力與恢復。" />
+    <Feature title="Readiness 0–10 分" text="整合睡眠、活動與訓練負荷，評估每日身體狀態。" />
+    <Feature title="24 小時日常續航，最長" text="42 / 46 mm，提供鋁金屬、鈦金屬與陶瓷。" />
+  </At>
+  <Fine>充電 15 分鐘可增加最長 12 小時續航。電池依設定與使用方式而異。</Fine>
+</Frame>;
+const UltraCompact: Page = () => <Frame>
+  <Heading product="Apple Watch Ultra 4" title="長距離運動，更長續航" />
+  <Photo src={ultraHero} alt="Apple Watch Ultra 4 鈦金屬錶殼" x={930} y={290} w={840} h={590} />
+  <At y={330} w={720}>
+    <Feature title="49 mm 鈦金屬，3,000 尼特" text="廣視角常亮螢幕，共用 S11 與健康感測系統。" />
+    <Feature title="50 小時一般使用，最長" text="低耗電模式最長 84 小時。" />
+    <Feature title="25 / 45 小時訓練模式" text="分別為 Extended 與 Max Extended Workout，最長值。" />
+  </At>
+  <Fine>續航依模式與使用方式而異。Max 模式調整部分量測，不可與一般模式直接互換。</Fine>
+</Frame>;
+const AirPodsCompact: Page = () => <Frame light>
+  <Heading product="AirPods 5" title="開放式配戴，主動降噪" />
+  <Photo src={airpodsHero} alt="AirPods 5 耳機與充電盒" x={970} y={280} w={790} h={640} />
+  <At y={335} w={760}>
+    <Feature title="噪音消除最高提升 50%" text="相較 AirPods 4 主動降噪款，兩個版本皆支援 ANC。" />
+    <Feature title="Adaptive Audio" text="依環境混合降噪與通透，開口說話時降低音量。" />
+    <Feature title="Live Translation" text="搭配相容 iPhone 與 Apple Intelligence 進行翻譯。" />
+  </At>
+  <Fine>降噪效果依配戴與環境而異。翻譯需下載語言，支援範圍依裝置、語言與地區。</Fine>
 </Frame>;
 const DuoIntro: Page = () => <Frame light>
   <Photo src={duoHero} alt="展開的 iPhone Duo" x={600} y={0} w={1200} h={760} />
@@ -294,7 +334,7 @@ const proSource = 'https://www.apple.com/newsroom/2026/09/apple-debuts-iphone-18
 const seriesSource = 'https://www.apple.com/newsroom/2026/09/introducing-apple-watch-series-12-with-the-all-new-health-sensing-system/';
 const ultraSource = 'https://www.apple.com/newsroom/2026/09/apple-unveils-apple-watch-ultra-4/';
 const airpodsSource = 'https://www.apple.com/newsroom/2026/09/apple-introduces-airpods-5-with-best-in-class-open-ear-active-noise-cancellation/';
-export const notes = [
+const originalNotes = [
   `依使用者指定的 https://iphone-duo-slide.vercel.app/s/apple-event-2026-09 排版風格重新製作。產品資料來源：Apple Newsroom 2026/09/09。非 Apple 官方簡報。`,
   `iPhone Duo 產品與圖片來源：${duoSource}`,
   `結構、防護與圖片：${duoSource}。100+ 代表鉸鏈零件數。`,
@@ -327,5 +367,19 @@ export const notes = [
   `官方美國價格及日期：${seriesSource}\n${ultraSource}\n${airpodsSource}。起售價未含銷售稅。`,
   `推出時程：${seriesSource}\n${ultraSource}\n${airpodsSource}。原始 iPhone 章節參考：https://iphone-duo-slide.vercel.app/s/apple-event-2026-09。`,
 ];
-export const meta: SlideMeta = { title: 'Apple 秋季發表會 2026 · 全產品整合版', createdAt: '2026-09-12T02:34:36.707Z' };
-export default [EventCover, DuoIntro, DuoDesign, DuoDisplay, DuoApps, DuoPhoto, Chip, DuoPower, DuoPrice, ProIntro, ProFinishes, Aperture, ProControl, ProPower, ProPrice, Series, Sensing, Readiness, Materials, SeriesBattery, Ultra, UltraBattery, UltraWorkout, UltraHardware, AudioIntelligence, AirPods, Noise, Listening, AirPodsBattery, Pricing, Timing] satisfies Page[];
+export const notes = [
+  originalNotes[0],
+  `三大產品定位與亮點摘要，整理自原整合版。${duoSource}\n${proSource}\n${seriesSource}\n${ultraSource}\n${airpodsSource}`,
+  ...originalNotes.slice(1, 10),
+  originalNotes[11], originalNotes[13], originalNotes[14],
+  `Series 12 健康、尺寸、材質與續航摘要：${seriesSource}。續航為最長值。Readiness 為日常健康與運動指標。`,
+  originalNotes[16],
+  `Ultra 4 螢幕、材質與不同模式續航摘要：${ultraSource}。25 / 45 小時分別指 Extended / Max Extended Workout。`,
+  `AirPods 5 降噪與智慧音訊摘要：${airpodsSource}。50% 為相較 AirPods 4 with ANC 的最高改善值，翻譯有裝置、地區與語言限制。`,
+  originalNotes[28], originalNotes[29],
+];
+SeriesCompact.transition = chapter;
+UltraCompact.transition = chapter;
+AirPodsCompact.transition = chapter;
+export const meta: SlideMeta = { title: 'Apple 秋季發表會 2026 · 20 頁精華版', createdAt: '2026-09-12T02:34:36.707Z' };
+export default [EventCover, ProductOverview, DuoIntro, DuoDesign, DuoDisplay, DuoApps, DuoPhoto, Chip, DuoPower, DuoPrice, ProIntro, Aperture, ProPower, ProPrice, SeriesCompact, Sensing, UltraCompact, AirPodsCompact, AirPodsBattery, Pricing] satisfies Page[];
