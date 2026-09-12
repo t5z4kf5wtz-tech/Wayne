@@ -54,6 +54,8 @@ const css = `
 @keyframes wear-image {from {opacity:0;transform:scale(1.045)} to {opacity:1;transform:scale(1)}}
 @keyframes wear-glow {from {opacity:.15} to {opacity:.55}}
 .wear-page .wear-title,.wear-page .wear-sub,.wear-page .wear-picture {animation:none}
+.wear-page.active .wear-picture {animation:wear-photo-settle 1100ms cubic-bezier(.16,1,.3,1) both}
+@keyframes wear-photo-settle {from {opacity:.65;transform:scale(1.018)} to {opacity:1;transform:scale(1)}}
 .wear-page .wear-glow {animation:none;opacity:.35}
 .wear-page h1,.wear-page h2,.wear-page p {margin:0}
 @media (prefers-reduced-motion:reduce){.wear-page *{animation:none!important;transition:none!important}}
@@ -100,11 +102,14 @@ const ProductOverview: Page = () => <Frame>
     <OverviewColumn name="Apple Watch" models="Series 12 / Ultra 4" purpose="日常健康與戶外運動" highlight="Series 聚焦健康感測。Ultra 提供更長續航，支援長距離訓練。" />
     <OverviewColumn name="AirPods" models="AirPods 5" purpose="日常聆聽與通話" highlight="開放式配戴加入主動降噪，依環境調整音訊，提供兩種充電盒。" />
   </At>
-  <At y={880}><p className="wear-sub" style={{ fontSize: 32, color: '#b3f870' }}>iPhone 深入介紹，搭配 Watch 與 AirPods 核心亮點。</p></At>
+  <Photo src={proColors} alt="iPhone Pro 色彩陣容" x={120} y={760} w={500} h={220} />
+  <Photo src={ultraHero} alt="Apple Watch Ultra 產品外觀" x={705} y={760} w={500} h={220} />
+  <Photo src={airpodsHero} alt="AirPods 耳機與充電盒" x={1290} y={760} w={500} h={220} style={{ background: '#fafafa', borderRadius: 24 }} />
 </Frame>;
 const SeriesCompact: Page = () => <Frame light>
   <Heading product="Apple Watch Series 12" title="日常健康，掌握恢復狀態" />
-  <Photo src={seriesHero} alt="Apple Watch Series 12 與健康感測器" x={910} y={300} w={860} h={575} />
+  <Photo src={seriesHero} alt="Apple Watch Series 12 與健康感測器" x={910} y={280} w={860} h={355} />
+  <Photo src={readiness} alt="Apple Watch Readiness 每日身體狀態畫面" x={910} y={660} w={860} h={280} />
   <At y={330} w={700}>
     <Feature title="S11 與全新健康感測系統" text="更頻繁收集心率與 HRV，觀察壓力與恢復。" />
     <Feature title="Readiness 0–10 分" text="整合睡眠、活動與訓練負荷，評估每日身體狀態。" />
@@ -114,7 +119,8 @@ const SeriesCompact: Page = () => <Frame light>
 </Frame>;
 const UltraCompact: Page = () => <Frame>
   <Heading product="Apple Watch Ultra 4" title="長距離運動，更長續航" />
-  <Photo src={ultraHero} alt="Apple Watch Ultra 4 鈦金屬錶殼" x={930} y={290} w={840} h={590} />
+  <Photo src={ultraRun} alt="佩戴 Apple Watch Ultra 的戶外跑者" x={930} y={290} w={500} h={635} fit="cover" />
+  <Photo src={ultraSensor} alt="Ultra 背面健康感測系統" x={1460} y={290} w={310} h={635} />
   <At y={330} w={720}>
     <Feature title="49 mm 鈦金屬，3,000 尼特" text="廣視角常亮螢幕，共用 S11 與健康感測系統。" />
     <Feature title="50 小時一般使用，最長" text="低耗電模式最長 84 小時。" />
@@ -124,7 +130,8 @@ const UltraCompact: Page = () => <Frame>
 </Frame>;
 const AirPodsCompact: Page = () => <Frame light>
   <Heading product="AirPods 5" title="開放式配戴，主動降噪" />
-  <Photo src={airpodsHero} alt="AirPods 5 耳機與充電盒" x={970} y={280} w={790} h={640} />
+  <Photo src={airpodsLife} alt="在餐廳配戴 AirPods 的聆聽情境" x={970} y={280} w={790} h={390} fit="cover" />
+  <Photo src={airpodsHero} alt="AirPods 5 耳機與充電盒" x={1140} y={695} w={460} h={265} />
   <At y={335} w={760}>
     <Feature title="噪音消除最高提升 50%" text="相較 AirPods 4 主動降噪款，兩個版本皆支援 ANC。" />
     <Feature title="Adaptive Audio" text="依環境混合降噪與通透，開口說話時降低音量。" />
