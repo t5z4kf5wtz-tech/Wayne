@@ -90,7 +90,7 @@ const Feature = ({ title, text }: { title: string; text: string }) => <div style
 const EventCover: Page = () => <Frame>
   <At y={155}><div className="wear-sub" style={{ fontSize: 32, color: '#86868b' }}>APPLE EVENT / SEPTEMBER 9, 2026</div><h1 className="wear-title" style={{ fontSize: 154, fontWeight: 650, lineHeight: 1.12, marginTop: 55 }}>Apple 秋季發表會</h1><p className="wear-sub" style={{ fontSize: 42, marginTop: 34, color: '#a1a1a6' }}>iPhone、Apple Watch 與 AirPods</p></At>
   <At y={695} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 100 }}><Steps><Step><Feature title="iPhone Duo / 18 Pro" text="折疊螢幕、可變光圈與 A20 Pro" /></Step><Step><Feature title="Series 12 / Ultra 4" text="全新健康感測系統與 S11" /></Step><Step><Feature title="AirPods 5" text="開放式主動降噪與智慧音訊" /></Step></Steps></At>
-  <Fine>20 頁精華版。產品特色、核心規格與美國起售價。非 Apple 官方簡報。</Fine>
+  <Fine>17 頁精華版。產品特色與核心規格。非 Apple 官方簡報。</Fine>
 </Frame>;
 const OverviewColumn = ({ name, models, purpose, highlight }: { name: string; models: string; purpose: string; highlight: string }) => <div><h3 style={{ fontSize: 58, margin: 0, fontWeight: 650 }}>{name}</h3><p style={{ fontSize: 28, color: '#86868b', marginTop: 22 }}>{models}</p><p style={{ fontSize: 36, lineHeight: 1.5, marginTop: 56 }}>{purpose}</p><p style={{ fontSize: 32, lineHeight: 1.6, color: '#a1a1a6', marginTop: 32 }}>{highlight}</p></div>;
 const ProductOverview: Page = () => <Frame>
@@ -377,16 +377,16 @@ const originalNotes = [
 export const notes = [
   originalNotes[0],
   `三大產品定位與亮點摘要，整理自原整合版。${duoSource}\n${proSource}\n${seriesSource}\n${ultraSource}\n${airpodsSource}`,
-  ...originalNotes.slice(1, 10),
-  originalNotes[11], originalNotes[13], originalNotes[14],
+  ...originalNotes.slice(1, 8), originalNotes[9],
+  originalNotes[11], originalNotes[13],
   `Series 12 健康、尺寸、材質與續航摘要：${seriesSource}。續航為最長值。Readiness 為日常健康與運動指標。`,
   originalNotes[16],
   `Ultra 4 螢幕、材質與不同模式續航摘要：${ultraSource}。25 / 45 小時分別指 Extended / Max Extended Workout。`,
   `AirPods 5 降噪與智慧音訊摘要：${airpodsSource}。50% 為相較 AirPods 4 with ANC 的最高改善值，翻譯有裝置、地區與語言限制。`,
-  originalNotes[28], originalNotes[29],
+  originalNotes[28],
 ];
 SeriesCompact.transition = chapter;
 UltraCompact.transition = chapter;
 AirPodsCompact.transition = chapter;
-export const meta: SlideMeta = { title: 'Apple 秋季發表會 2026 · 20 頁精華版', createdAt: '2026-09-12T02:34:36.707Z' };
-export default [EventCover, ProductOverview, DuoIntro, DuoDesign, DuoDisplay, DuoApps, DuoPhoto, Chip, DuoPower, DuoPrice, ProIntro, Aperture, ProPower, ProPrice, SeriesCompact, Sensing, UltraCompact, AirPodsCompact, AirPodsBattery, Pricing] satisfies Page[];
+export const meta: SlideMeta = { title: 'Apple 秋季發表會 2026 · 17 頁精華版', createdAt: '2026-09-12T02:34:36.707Z' };
+export default [EventCover, ProductOverview, DuoIntro, DuoDesign, DuoDisplay, DuoApps, DuoPhoto, Chip, DuoPower, ProIntro, Aperture, ProPower, SeriesCompact, Sensing, UltraCompact, AirPodsCompact, AirPodsBattery] satisfies Page[];
