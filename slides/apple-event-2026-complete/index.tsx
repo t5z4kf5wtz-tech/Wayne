@@ -106,11 +106,12 @@ const ProductOverview: Page = () => <Frame>
     <OverviewColumn name="Apple Watch" models="Series 12 / Ultra 4" purpose="日常健康與戶外運動" highlight="Series 聚焦健康感測。Ultra 提供更長續航，支援長距離訓練。" />
     <OverviewColumn name="AirPods" models="AirPods 5" purpose="日常聆聽與通話" highlight="開放式配戴加入主動降噪，依環境調整音訊，提供兩種充電盒。" />
   </At>
-  <Photo src={duoOverview} alt="iPhone Duo 星光白與夜空色產品圖，背景經編輯" x={120} y={760} w={245} h={200} />
-  <Photo src={proColors} alt="iPhone Pro 色彩陣容" x={385} y={760} w={235} h={200} />
+  <Photo src={duoOverview} alt="iPhone Duo 星光白與夜空色產品圖，背景經編輯" x={90} y={735} w={360} h={250} />
+  <Photo src={proColors} alt="iPhone Pro 色彩陣容" x={450} y={760} w={180} h={200} />
   <Photo src={seriesOverview} alt="Apple Watch Series 12 產品圖，背景經編輯" x={705} y={760} w={245} h={200} />
   <Photo src={ultraHero} alt="Apple Watch Ultra 產品外觀" x={970} y={760} w={235} h={200} />
-  <At y={978} w={500} style={{ display: 'flex', justifyContent: 'space-around', fontSize: 23, color: '#a1a1a6' }}><span>iPhone Duo</span><span>18 Pro</span></At>
+  <At x={145} y={990} w={250} style={{ textAlign: 'center', fontSize: 23, color: '#a1a1a6' }}>iPhone Duo</At>
+  <At x={450} y={990} w={180} style={{ textAlign: 'center', fontSize: 23, color: '#a1a1a6' }}>18 Pro</At>
   <At x={705} y={978} w={500} style={{ display: 'flex', justifyContent: 'space-around', fontSize: 23, color: '#a1a1a6' }}><span>Series 12</span><span>Ultra 4</span></At>
   <Photo src={airpodsOverview} alt="AirPods 耳機與充電盒，背景經編輯" x={1290} y={750} w={500} h={245} />
 </Frame>;
