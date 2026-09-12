@@ -102,8 +102,12 @@ const ProductOverview: Page = () => <Frame>
     <OverviewColumn name="Apple Watch" models="Series 12 / Ultra 4" purpose="日常健康與戶外運動" highlight="Series 聚焦健康感測。Ultra 提供更長續航，支援長距離訓練。" />
     <OverviewColumn name="AirPods" models="AirPods 5" purpose="日常聆聽與通話" highlight="開放式配戴加入主動降噪，依環境調整音訊，提供兩種充電盒。" />
   </At>
-  <Photo src={proColors} alt="iPhone Pro 色彩陣容" x={120} y={760} w={500} h={220} />
-  <Photo src={ultraHero} alt="Apple Watch Ultra 產品外觀" x={705} y={760} w={500} h={220} />
+  <Photo src={duoDisplays} alt="iPhone Duo 折疊產品圖" x={120} y={760} w={245} h={200} style={{ background: '#fafafa', borderRadius: 24 }} />
+  <Photo src={proColors} alt="iPhone Pro 色彩陣容" x={385} y={760} w={235} h={200} />
+  <Photo src={seriesHero} alt="Apple Watch Series 12 產品图" x={705} y={760} w={245} h={200} style={{ background: '#fafafa', borderRadius: 24 }} />
+  <Photo src={ultraHero} alt="Apple Watch Ultra 產品外觀" x={970} y={760} w={235} h={200} />
+  <At y={978} w={500} style={{ display: 'flex', justifyContent: 'space-around', fontSize: 23, color: '#a1a1a6' }}><span>iPhone Duo</span><span>18 Pro</span></At>
+  <At x={705} y={978} w={500} style={{ display: 'flex', justifyContent: 'space-around', fontSize: 23, color: '#a1a1a6' }}><span>Series 12</span><span>Ultra 4</span></At>
   <Photo src={airpodsHero} alt="AirPods 耳機與充電盒" x={1290} y={760} w={500} h={220} style={{ background: '#fafafa', borderRadius: 24 }} />
 </Frame>;
 const SeriesCompact: Page = () => <Frame light>
@@ -119,8 +123,7 @@ const SeriesCompact: Page = () => <Frame light>
 </Frame>;
 const UltraCompact: Page = () => <Frame>
   <Heading product="Apple Watch Ultra 4" title="長距離運動，更長續航" />
-  <Photo src={ultraRun} alt="佩戴 Apple Watch Ultra 的戶外跑者" x={930} y={290} w={500} h={635} fit="cover" />
-  <Photo src={ultraSensor} alt="Ultra 背面健康感測系統" x={1460} y={290} w={310} h={635} />
+  <Photo src={ultraHero} alt="Apple Watch Ultra 4 大幅產品圖，鈦金屬錶殼與數位錶冠" x={875} y={280} w={945} h={675} />
   <At y={330} w={720}>
     <Feature title="49 mm 鈦金屬，3,000 尼特" text="廣視角常亮螢幕，共用 S11 與健康感測系統。" />
     <Feature title="50 小時一般使用，最長" text="低耗電模式最長 84 小時。" />
