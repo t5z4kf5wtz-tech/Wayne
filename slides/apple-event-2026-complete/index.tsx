@@ -1,4 +1,4 @@
-import { Fragment, type CSSProperties, type ReactNode } from 'react';
+import { Fragment, useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import { useIsActivePage, type DesignSystem, type Page, type SlideMeta, type SlideTransition } from '@open-slide/core';
 
 // Preserve the existing layout while presenting every item immediately.
@@ -67,7 +67,22 @@ const Heading = ({ product, title, subtitle }: { product: string; title: ReactNo
 const Photo = ({ src, alt, x, y, w, h, fit = 'contain', style }: { src: string; alt: string; x: number; y: number; w: number; h: number; fit?: 'contain' | 'cover'; style?: CSSProperties }) => <div style={{ position: 'absolute', left: x, top: y, width: w, height: h, ...style }}><img className="wear-picture" src={src} alt={alt} style={{ width: '100%', height: '100%', objectFit: fit, borderRadius: 24 }} /></div>;
 const Fine = ({ children }: { children: ReactNode }) => <At y={994}><p style={{ fontSize: 23, lineHeight: 1.4, color: '#86868b', letterSpacing: '-.015em' }}>{children}</p></At>;
 const Count = ({ value }: { value: number }) => {
-  return <span style={{ fontVariantNumeric: 'tabular-nums' }}>{value}</span>;
+  const active = useIsActivePage();
+  const [n, setN] = useState(value);
+  useEffect(() => {
+    if (!active || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setN(value); return; }
+    setN(0);
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / 900);
+      setN(Math.round(value * (1 - Math.pow(1 - t, 4))));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [active, value]);
+  return <span aria-label={String(value)} style={{ fontVariantNumeric: 'tabular-nums' }}>{active ? n : value}</span>;
 };
 const Metric = ({ value, unit, label, detail, size = 146, accent }: { value: number; unit: string; label: string; detail?: string; size?: number; accent?: string }) => <div><div style={{ fontSize: size, lineHeight: 1.05, fontWeight: 650, color: accent }}><Count value={value} /><span style={{ fontSize: 36, marginLeft: 10 }}>{unit}</span></div><div style={{ fontSize: 32, fontWeight: 550, marginTop: 22 }}>{label}</div>{detail && <p style={{ fontSize: 25, color: '#86868b', lineHeight: 1.5, marginTop: 12 }}>{detail}</p>}</div>;
 const Feature = ({ title, text }: { title: string; text: string }) => <div style={{ marginBottom: 42 }}><h3 style={{ fontSize: 36, margin: '0 0 14px', fontWeight: 600 }}>{title}</h3><p style={{ fontSize: 30, color: '#86868b', lineHeight: 1.5 }}>{text}</p></div>;
